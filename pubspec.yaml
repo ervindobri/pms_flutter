@@ -31,6 +31,8 @@ dependencies:
   sidenavbar: ^0.0.10
   font_awesome_flutter: ^8.10.0
   google_fonts: ^1.1.1
+  pluto_grid: ^0.1.21
+  md2_tab_indicator: ^1.0.2
 
 dev_dependencies:
   flutter_test:

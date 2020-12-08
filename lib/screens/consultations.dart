@@ -6,6 +6,9 @@ import 'package:FlutterProjects/models/patient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+import 'consultation_details.dart';
 
 class ConsulationScreen extends StatefulWidget {
   @override
@@ -14,10 +17,82 @@ class ConsulationScreen extends StatefulWidget {
 
 class _ConsulationScreenState extends State<ConsulationScreen> {
 
+  PlutoStateManager stateManager;
+  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.Row;
+
+  List<PlutoColumn> columns = [
+    /// Text Column definition
+    PlutoColumn(
+      title: 'text column',
+      field: 'text_field',
+      type: PlutoColumnType.text(),
+    ),
+    /// Number Column definition
+    PlutoColumn(
+      title: 'number column',
+      field: 'number_field',
+      type: PlutoColumnType.number(),
+    ),
+    /// Select Column definition
+    PlutoColumn(
+      title: 'select column',
+      field: 'select_field',
+      type: PlutoColumnType.select(['item1', 'item2', 'item3']),
+    ),
+    /// Datetime Column definition
+    PlutoColumn(
+      title: 'date column',
+      field: 'date_field',
+      type: PlutoColumnType.date(),
+    ),
+    /// Time Column definition
+    PlutoColumn(
+      title: 'time column',
+      field: 'time_field',
+      type: PlutoColumnType.time(),
+    ),
+  ];
+
+  List<PlutoRow> rows = [
+    PlutoRow(
+      cells: {
+        'text_field': PlutoCell(value: 'Text cell value1'),
+        'number_field': PlutoCell(value: 2020),
+        'select_field': PlutoCell(value: 'item1'),
+        'date_field': PlutoCell(value: '2020-08-06'),
+        'time_field': PlutoCell(value: '12:30'),
+      },
+    ),
+    PlutoRow(
+      cells: {
+        'text_field': PlutoCell(value: 'Text cell value2'),
+        'number_field': PlutoCell(value: 2021),
+        'select_field': PlutoCell(value: 'item2'),
+        'date_field': PlutoCell(value: '2020-08-07'),
+        'time_field': PlutoCell(value: '18:45'),
+      },
+    ),
+    PlutoRow(
+      cells: {
+        'text_field': PlutoCell(value: 'Text cell value3'),
+        'number_field': PlutoCell(value: 2022),
+        'select_field': PlutoCell(value: 'item3'),
+        'date_field': PlutoCell(value: '2020-08-08'),
+        'time_field': PlutoCell(value: '23:59'),
+      },
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
+
+    bool _sortNameAsc = true;
+    bool _sortAgeAsc = true;
+    bool _sortHightAsc = true;
+    bool _sortAsc = true;
+    int _sortColumnIndex;
 
     return Scaffold(
       body: Container(
@@ -36,17 +111,43 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
               ),
             ),
             Container(
-              child: Row(
-                children: [
-                  Container(
-                    width: min(_width/4, 300),
-                    height: _height - max(_height/20, 60),
-                    color: ThemeColors.oliveLighter.withOpacity(.3),
-                    child: Center(
-                      child: displayPatientInfo(GlobalVariables.dummyPatients[0])
+              child:
+              Container(
+                width: _width,
+                height: _height - max(_height/20, 60),
+                child:DataTable(
+                    showCheckboxColumn: false, // <-- this is important
+                    columns: [
+                      DataColumn(label: Text('Date')),
+                      DataColumn(label: Text('Duration')),
+                      DataColumn(
+                          label: Text('Patient'),
+                          tooltip: "First and last name of the patient",
+                          onSort: (columnIndex, sortAscending) {
+                            setState(() {
+                              if (columnIndex == _sortColumnIndex) {
+                                _sortAsc = _sortNameAsc = sortAscending;
+                              } else {
+                                _sortColumnIndex = columnIndex;
+                                _sortAsc = _sortNameAsc;
+                              }
+                              List<Patient> patients = [];
+                              GlobalVariables.dummyConsultations.forEach((element) {
+                                  patients.add(element.patient);
+                              });
+                              patients.sort((a, b) => a.firstName.compareTo(b.firstName));
+                              if (!sortAscending) {
+                                patients = patients.reversed.toList();
+                              }
+                            });
+                          },
                       ),
-                  )
-                ],
+                      DataColumn(label: Text('Blood Type')),
+                      DataColumn(label: Text('Situation')),
+
+                    ],
+                    rows: createTableRows(),
+                ),
               ),
             )
           ],
@@ -55,361 +156,27 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
     );
   }
 
-  displayPatientInfo(Patient patient) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        "https://vdm.dermatoscope.ro/web/image?model=eo.vdm.appointment&id=115&field=patient_image&unique=20200729125456"
-                      ),
-                      backgroundColor: Colors.white,
-                      minRadius: 30,
-                      maxRadius: 30,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          patient.firstName  + " " + patient.lastName,
-                            style: GoogleFonts.lato(
-                            color: ThemeColors.greyTextColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 23,
-                          ),
-                        ),
-                        Text(
-                          patient.birthDate.toString(),
-                          style: GoogleFonts.lato(
-                            color: ThemeColors.greyTextColor,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Text(
-                          patient.sex.toString(),
-                          style: GoogleFonts.lato(
-                            color: ThemeColors.greyTextColor,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Text(
-                          "Personal information",
-                          style: GoogleFonts.lato(
-                            color: ThemeColors.greyTextColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Cod asigurat",
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              patient.pid.toString(),
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Age",
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              patient.age.toString(),
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Occupation",
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              patient.occupation.toString(),
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Job address",
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              patient.jobAddress.toString(),
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Education level",
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              patient.educationLevel ?? "None",
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Text(
-                            "Contact information",
-                          style: GoogleFonts.lato(
-                            color: ThemeColors.greyTextColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Address",
-                                  style: GoogleFonts.lato(
-                                    color: ThemeColors.greyTextColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      patient.address.toString(),
-                                      style: GoogleFonts.lato(
-                                        color: ThemeColors.greyTextColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      patient.city.toString(),
-                                      style: GoogleFonts.lato(
-                                        color: ThemeColors.greyTextColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      patient.state.toString(),
-                                      style: GoogleFonts.lato(
-                                        color: ThemeColors.greyTextColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      patient.zipCode.toString(),
-                                      style: GoogleFonts.lato(
-                                        color: ThemeColors.greyTextColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      patient.country.toString(),
-                                      style: GoogleFonts.lato(
-                                        color: ThemeColors.greyTextColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 20,
-                                      ),
-                                    ),
 
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Mobile phone",
-                                  style: GoogleFonts.lato(
-                                    color: ThemeColors.greyTextColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  patient.phone.toString(),
-                                  style: GoogleFonts.lato(
-                                    color: ThemeColors.greyTextColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Fax",
-                                  style: GoogleFonts.lato(
-                                    color: ThemeColors.greyTextColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  patient.fax.toString(),
-                                  style: GoogleFonts.lato(
-                                    color: ThemeColors.greyTextColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Email",
-                                  style: GoogleFonts.lato(
-                                    color: ThemeColors.greyTextColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  patient.email.toString(),
-                                  style: GoogleFonts.lato(
-                                    color: ThemeColors.greyTextColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      )
-    );
+
+
+  createTableRows() {
+    List<DataRow> rows = [];
+    GlobalVariables.dummyConsultations.forEach((consultation) {
+      rows.add(
+        DataRow(
+          cells: [
+            DataCell(Text(consultation.date)),
+            DataCell(Text(consultation.duration)),
+            DataCell(Text(consultation.patient.getName())),
+            DataCell(Text(consultation.patient.bloodType)),
+            DataCell(Text(consultation.situation)),
+          ],
+          onSelectChanged: (newValue) {
+            Navigator.push(context, CupertinoPageRoute(builder: (_)=> ConsultationDetails(consultation: consultation)) );
+          },
+        )
+      );
+    });
+    return rows;
   }
 }

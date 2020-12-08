@@ -1,5 +1,7 @@
 
 
+import 'package:flutter/src/widgets/framework.dart';
+
 class Patient{
   int pid; //cod asigurat
   //personal info
@@ -12,6 +14,14 @@ class Patient{
   String occupation = "homeless";
   String jobAddress ="everywhere street, nr.22";
   String educationLevel = "none";
+
+  //Medical info
+  String bloodType;
+  String RH;
+  double waistSize;
+  double weight;
+  String diseases;
+  String allergies;
 
   //contact information
   String address = "street";
@@ -34,6 +44,12 @@ class Patient{
       this.occupation = "",
       this.jobAddress ="",
       this.educationLevel ="",
+      this.bloodType = "A",
+      this.RH = "Positive",
+      this.waistSize = 69.22,
+      this.weight = 61,
+      this.diseases = "None",
+      this.allergies = "None",
       this.address = "",
       this.city = "",
       this.country = "",
@@ -60,4 +76,8 @@ class Patient{
       this.country,
       this.state,
       this.zipCode});
+
+  String getName() {
+    return this.firstName + " " + this.lastName;
+  }
 }

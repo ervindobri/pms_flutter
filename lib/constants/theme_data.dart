@@ -3,6 +3,10 @@
 
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 class ThemeColors{
       static const Map<int, Color> colorCodes = {
         50: Color.fromRGBO(147, 205, 72, .1),
@@ -24,4 +28,34 @@ class ThemeColors{
       static const oliveLight = const Color(0xff7c9d45);
       static const oliveLighter = const Color(0xff96b85d);
       static const greyTextColor = const Color(0xff565656);
+
+      static const eronOliveLight = const Color(0xff93bb1b);
+      static const eronOliveDark = const Color(0xff698c00);
+      static const erondGreen = const Color(0xff067f4b);
+
+      static var mediumWhiteStyle = GoogleFonts.lato(
+      color: Colors.white,
+      fontSize: 15
+      );
+      static var bigWhiteStyle = GoogleFonts.lato(
+          color: Colors.white,
+          fontSize: 20
+      );
+
+      static var mediumDarkStyle = GoogleFonts.lato(
+          color: greyTextColor,
+          fontSize: 15
+      );
+
+      static var thickDarkstyle = GoogleFonts.lato(
+          color: greyTextColor,
+          fontWeight: FontWeight.w700,
+          fontSize: 15
+      );
+
+      static var bigDarkStyle = GoogleFonts.lato(
+          color: greyTextColor,
+          fontSize: 20
+      );
+
 }
