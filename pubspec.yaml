@@ -33,6 +33,11 @@ dependencies:
   google_fonts: ^1.1.1
   pluto_grid: ^0.1.21
   md2_tab_indicator: ^1.0.2
+  collapsible_sidebar: ^1.0.5
+  animations: ^1.1.2
+  simple_animations: ^2.4.2
+  expandable: ^4.1.4
+  flutter_staggered_animations: ^0.1.2
 
 dev_dependencies:
   flutter_test:

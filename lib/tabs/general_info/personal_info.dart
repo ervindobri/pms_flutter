@@ -11,10 +11,13 @@ class PersonalInfo extends StatelessWidget {
   const PersonalInfo({Key key, this.patient}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      body: Container(
-        color: Colors.grey.shade100,
+    return Container(
+      width: _width,
+        height: _height,
+        color: Colors.transparent,
         child: Column(
           children: [
             Padding(
@@ -101,7 +104,6 @@ class PersonalInfo extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }

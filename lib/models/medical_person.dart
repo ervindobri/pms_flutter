@@ -7,6 +7,7 @@ class MedicalStaff{
   String mobilePhone;
   String emailAddress;
   String address;
+  String specialty;
   String fax;
   String sex;
   bool informationAndTelemedicine;
@@ -19,8 +20,9 @@ class MedicalStaff{
       this.phone,
       [
       this.title = "Dr.",
-      this.mobilePhone = "000000",
+        this.mobilePhone = "000000",
       this.address = "None",
+      this.specialty = "General medic",
       this.fax  = "None",
       this.sex  = "None",
       this.informationAndTelemedicine = true

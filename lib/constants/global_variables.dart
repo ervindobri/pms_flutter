@@ -3,6 +3,7 @@ import 'package:FlutterProjects/models/medical_person.dart';
 import 'package:FlutterProjects/models/patient.dart';
 import 'package:FlutterProjects/screens/consultations.dart';
 import 'package:FlutterProjects/screens/patients.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GlobalVariables {
@@ -28,8 +29,10 @@ class GlobalVariables {
     MedicalStaff.name(3,"Jozsi","Kuvuki", "kuvukijozsi@medixxx.ro", "0769122345"),
   ];
   static List<Consultation> dummyConsultations = [
-    Consultation(dummyPatients[0],dummyMedics[0]),
-    Consultation(dummyPatients[1], dummyMedics[1]),
+    Consultation(dummyPatients[0],dummyMedics[0], "Confirmed", "2020-12-08", "2020-08-09 17:25", "16:40", "00:45"),
+    Consultation(dummyPatients[1], dummyMedics[1], "Confirmed", "2017-03-22" ,"2020-08-09 15:50", "15:30", "00:30"),
     Consultation(dummyPatients[2], dummyMedics[2]),
   ];
+
+
 }

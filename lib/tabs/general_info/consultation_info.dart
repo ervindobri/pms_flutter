@@ -12,10 +12,9 @@ class ConsultationInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      body: Container(
-          color: Colors.grey.shade100,
-          child: Column(
+    return Container(
+      color: Colors.transparent,
+      child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -117,7 +116,6 @@ class ConsultationInfo extends StatelessWidget {
               ),
             ],
           ),
-      ),
-    );
+      );
   }
 }

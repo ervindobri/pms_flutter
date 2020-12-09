@@ -1,4 +1,6 @@
-import 'package:FlutterProjects/constants/GlobalVariables.dart';
+import 'dart:math';
+
+import 'package:FlutterProjects/constants/global_variables.dart';
 import 'package:FlutterProjects/constants/theme_data.dart';
 import 'package:FlutterProjects/screens/consultations.dart';
 import 'package:FlutterProjects/screens/patients.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:sidenavbar/sidenavbar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,67 +17,67 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyAppState extends State<HomeScreen> {
-  Widget currentItem = ConsulationScreen();
-  bool isCollapsed = false;
+  List<CollapsibleItem> _items;
+  String _headline;
+  NetworkImage _avatarImg =
+  NetworkImage('https://www.w3schools.com/howto/img_avatar.png');
 
-  void show(Widget widget) {
-    setState(() {
-      currentItem = widget;
-    });
+  Widget currentScreen = ConsulationScreen();
+
+  @override
+  void initState() {
+    super.initState();
+    _items = _generateItems;
+    _headline = _items.firstWhere((item) => item.isSelected).text;
   }
 
-  createMenuItems(){
-    List<NavItem> items = [];
-    GlobalVariables.menuItems.forEach((key, value) {
-        items.add(NavItem(
-          hoverColor: ThemeColors.oliveMid,
-          title: Text(
-              key.toString(),
-              style: GoogleFonts.lato(
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-                color: Colors.white
-            ),
-          ),
-          icon: FaIcon(
-            value[0],
-            color: Colors.white,
-          ),
-          isCollapsed: isCollapsed,
-          onPressed: () {
-            show(value[1]);
+  List<CollapsibleItem> get _generateItems {
+    List<CollapsibleItem> items = [];
+    GlobalVariables.menuItems.forEach((title, list) {
+        items.add(CollapsibleItem(
+          text: title,
+          icon: list[0],
+          onPressed: (){
+          setState(() {
+            _headline = title;
+            currentScreen = list[1];
+          });
+          // Navigator.push(context, CupertinoPageRoute(builder: (_) => list[1] ));
           },
+          isSelected: false,
         ));
     });
+    items[0].isSelected = true;
     return items;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SideBar(
-        backgroundColor: ThemeColors.primaryColor,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.start,
-        sideBarCollapsedWidth: 70,
-        isCollapsed: isCollapsed,
-        collapseIcon: CollapseIcon(
-          isCollapsed: isCollapsed,
-          icon: FaIcon(
-            FontAwesomeIcons.arrowAltCircleLeft,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            setState(() {
-              isCollapsed = !isCollapsed;
-            });
-          },
-        ),
-        currentItem: currentItem,
-        navItems: createMenuItems()
-      ),
-    );
+    return CollapsibleSidebar(
+            items: _items,
+            title: 'VDM Manager',
+            avatarImg: NetworkImage('https://www.w3schools.com/howto/img_avatar.png'),
+            body: _body(MediaQuery.of(context).size, context),
+            height: double.infinity,
+            minWidth: 80,
+            maxWidth: 270,
+            borderRadius: 15,
+            iconSize: 40,
+            textSize: 20,
+            toggleButtonIcon: Icons.chevron_right,
+            selectedIconBox: ThemeColors.erondGreen.withOpacity(.5),
+            backgroundColor: ThemeColors.vibrantGreen.withOpacity(.7),
+            selectedIconColor: Colors.white,
+            selectedTextColor: Color(0xffF3F7F7),
+            unselectedIconColor: Colors.grey.shade50,
+            unselectedTextColor: Colors.grey.shade100,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.fastLinearToSlowEaseIn,
+            screenPadding: 4,
+            showCollapseButton: true,
+          );
+  }
+  Widget _body(Size size, BuildContext context) {
+    return currentScreen;
   }
 }

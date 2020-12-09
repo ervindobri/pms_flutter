@@ -33,6 +33,8 @@ class ThemeColors{
       static const eronOliveDark = const Color(0xff698c00);
       static const erondGreen = const Color(0xff067f4b);
 
+      static const vibrantGreen = const Color(0xff0ee398);
+
       static var mediumWhiteStyle = GoogleFonts.lato(
       color: Colors.white,
       fontSize: 15
@@ -58,4 +60,29 @@ class ThemeColors{
           fontSize: 20
       );
 
+      static var thickLightStyle = GoogleFonts.lato(
+          color: CupertinoColors.white,
+          fontWeight: FontWeight.w700,
+          fontSize: 15
+      );
+
+
+      static var radius15 = BorderRadius.circular(15);
+      static var radius25 = BorderRadius.circular(25);
+
+      static final List<BoxShadow> greenShadow = [
+        BoxShadow(
+            color: ThemeColors.vibrantGreen.withOpacity(.2),
+            blurRadius: 40,
+            spreadRadius: -5
+        )];
+
+      static final List<BoxShadow> greyShadow = [
+        BoxShadow(
+            color: Colors.grey.shade400.withOpacity(.2),
+            blurRadius: 40,
+            spreadRadius: -5
+        )];
+
+  static var lightVibrantGreenColor = const Color(0xff4ecc97);
 }

@@ -1,12 +1,13 @@
 import 'dart:math';
 
-import 'package:FlutterProjects/constants/GlobalVariables.dart';
+import 'package:FlutterProjects/constants/global_variables.dart';
 import 'package:FlutterProjects/constants/theme_data.dart';
+import 'package:FlutterProjects/helpers/sharedaxisroute.dart';
 import 'package:FlutterProjects/models/patient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:animations/animations.dart';
 
 import 'consultation_details.dart';
 
@@ -16,147 +17,180 @@ class ConsulationScreen extends StatefulWidget {
 }
 
 class _ConsulationScreenState extends State<ConsulationScreen> {
+  var _currentSortIndex = 0;
+  bool _sortAsc = true;
+  bool selected = false;
 
-  PlutoStateManager stateManager;
-  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.Row;
+  final List<BoxShadow> greenShadow = [
+    BoxShadow(
+        color: ThemeColors.greyTextColor.withOpacity(.2),
+        blurRadius: 40,
+        spreadRadius: -5
+    )];
 
-  List<PlutoColumn> columns = [
-    /// Text Column definition
-    PlutoColumn(
-      title: 'text column',
-      field: 'text_field',
-      type: PlutoColumnType.text(),
-    ),
-    /// Number Column definition
-    PlutoColumn(
-      title: 'number column',
-      field: 'number_field',
-      type: PlutoColumnType.number(),
-    ),
-    /// Select Column definition
-    PlutoColumn(
-      title: 'select column',
-      field: 'select_field',
-      type: PlutoColumnType.select(['item1', 'item2', 'item3']),
-    ),
-    /// Datetime Column definition
-    PlutoColumn(
-      title: 'date column',
-      field: 'date_field',
-      type: PlutoColumnType.date(),
-    ),
-    /// Time Column definition
-    PlutoColumn(
-      title: 'time column',
-      field: 'time_field',
-      type: PlutoColumnType.time(),
-    ),
-  ];
+  SharedAxisTransitionType transitionType =
+      SharedAxisTransitionType.horizontal;
 
-  List<PlutoRow> rows = [
-    PlutoRow(
-      cells: {
-        'text_field': PlutoCell(value: 'Text cell value1'),
-        'number_field': PlutoCell(value: 2020),
-        'select_field': PlutoCell(value: 'item1'),
-        'date_field': PlutoCell(value: '2020-08-06'),
-        'time_field': PlutoCell(value: '12:30'),
-      },
-    ),
-    PlutoRow(
-      cells: {
-        'text_field': PlutoCell(value: 'Text cell value2'),
-        'number_field': PlutoCell(value: 2021),
-        'select_field': PlutoCell(value: 'item2'),
-        'date_field': PlutoCell(value: '2020-08-07'),
-        'time_field': PlutoCell(value: '18:45'),
-      },
-    ),
-    PlutoRow(
-      cells: {
-        'text_field': PlutoCell(value: 'Text cell value3'),
-        'number_field': PlutoCell(value: 2022),
-        'select_field': PlutoCell(value: 'item3'),
-        'date_field': PlutoCell(value: '2020-08-08'),
-        'time_field': PlutoCell(value: '23:59'),
-      },
-    ),
-  ];
+  Widget selectedWidget;
 
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
+    final radius =  BorderRadius.circular(15);
 
-    bool _sortNameAsc = true;
-    bool _sortAgeAsc = true;
-    bool _sortHightAsc = true;
-    bool _sortAsc = true;
-    int _sortColumnIndex;
 
+    return !selected
+     ? mainList()
+      : selectedWidget;
+  }
+
+  mainList(){
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
+    final radius =  BorderRadius.circular(15);
     return Scaffold(
-      body: Container(
-        height: _height,
-        width: _width,
-        child: Column(
-          children: [
-            Container(
-              width: _width,
-              height: max(_height/20, 60),
-              color: ThemeColors.oliveLighter.withOpacity(.5),
-              child: Center(
-                child: Text(
-                  "here comes the upper menu"
+      backgroundColor: Colors.grey.shade100,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 35.0, horizontal: 25),
+        child: Container(
+          height: _height,
+          width: _width,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Container(
+                  width: _width,
+                  height: max(_height/20, 60),
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.white,
+                    borderRadius: ThemeColors.radius15,
+                    boxShadow: greenShadow,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "here comes the floating search menu with filters",
+                      style: ThemeColors.thickDarkstyle,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            Container(
-              child:
-              Container(
-                width: _width,
-                height: _height - max(_height/20, 60),
-                child:DataTable(
-                    showCheckboxColumn: false, // <-- this is important
-                    columns: [
-                      DataColumn(label: Text('Date')),
-                      DataColumn(label: Text('Duration')),
-                      DataColumn(
-                          label: Text('Patient'),
-                          tooltip: "First and last name of the patient",
-                          onSort: (columnIndex, sortAscending) {
-                            setState(() {
-                              if (columnIndex == _sortColumnIndex) {
-                                _sortAsc = _sortNameAsc = sortAscending;
-                              } else {
-                                _sortColumnIndex = columnIndex;
-                                _sortAsc = _sortNameAsc;
-                              }
-                              List<Patient> patients = [];
-                              GlobalVariables.dummyConsultations.forEach((element) {
-                                  patients.add(element.patient);
-                              });
-                              patients.sort((a, b) => a.firstName.compareTo(b.firstName));
-                              if (!sortAscending) {
-                                patients = patients.reversed.toList();
-                              }
-                            });
-                          },
-                      ),
-                      DataColumn(label: Text('Blood Type')),
-                      DataColumn(label: Text('Situation')),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 35.0, horizontal: 25),
+                child: Container(
+                  decoration: BoxDecoration(
+                      boxShadow: greenShadow
 
-                    ],
-                    rows: createTableRows(),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: radius,
+                    child: Container(
+                      width: _width,
+                      decoration: BoxDecoration(
+                          borderRadius: radius,
+                          color: CupertinoColors.white,
+                          boxShadow: greenShadow
+                      ),
+                      child:DataTable(
+                        sortColumnIndex: _currentSortIndex,
+                        sortAscending: _sortAsc,
+                        dataRowHeight: 65,
+                        headingTextStyle: ThemeColors.thickLightStyle,
+                        headingRowHeight: 100,
+                        showBottomBorder: true,
+                        showCheckboxColumn: false, // <-- this is important
+                        columns: [
+                          DataColumn(
+                              label: Text(
+                                'Date',
+                                style: ThemeColors.thickDarkstyle,
+                              ),
+                              onSort: (columnIndex, sortAscending){
+
+                                setState(() {
+                                  _currentSortIndex = columnIndex;
+                                  _sortAsc = sortAscending;
+                                  GlobalVariables.dummyConsultations.sort((a, b) => a.date.compareTo(b.date));
+                                  if (!sortAscending) {
+                                    GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
+                                  }
+                                });
+                              }
+                          ),
+                          DataColumn(
+                            label: Text('Duration', style: ThemeColors.thickDarkstyle,),
+                            onSort: (columnIndex, sortAscending) {
+                              setState(() {
+                                _currentSortIndex = columnIndex;
+                                _sortAsc = sortAscending;
+
+                                GlobalVariables.dummyConsultations.sort((a, b) => a.duration.toLowerCase().compareTo(b.duration.toLowerCase()));
+                                if (!sortAscending) {
+                                  GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
+                                }
+                                print(sortAscending);
+                              });
+                            },
+                          ),
+                          DataColumn(
+                            label: Text('Patient', style: ThemeColors.thickDarkstyle,),
+                            tooltip: "First and last name of the patient",
+                            onSort: (columnIndex, sortAscending) {
+                              setState(() {
+                                _currentSortIndex = columnIndex;
+                                _sortAsc = sortAscending;
+
+                                GlobalVariables.dummyConsultations.sort((a, b) => a.patient.firstName.toLowerCase().compareTo(b.patient.firstName.toLowerCase()));
+                                if (!sortAscending) {
+                                  GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
+                                }
+                              });
+                            },
+                          ),
+                          DataColumn(label: Text(
+                              'Blood Type',style: ThemeColors.thickDarkstyle)
+                          ),
+                          DataColumn(label: Text('Situation',style: ThemeColors.thickDarkstyle)
+                          ),
+
+                        ],
+                        rows: createTableRows(),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
 
+
+  consultationTransition( Widget child ){
+    return PageTransitionSwitcher(
+        duration: const Duration(milliseconds: 500),
+        reverse: true,
+        transitionBuilder: (
+            Widget child,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            )
+        {
+          return SharedAxisTransition(
+            child: child,
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: transitionType,
+          );
+        },
+        child: child,
+
+    );
+  }
 
 
   createTableRows() {
@@ -165,14 +199,25 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
       rows.add(
         DataRow(
           cells: [
-            DataCell(Text(consultation.date)),
-            DataCell(Text(consultation.duration)),
-            DataCell(Text(consultation.patient.getName())),
-            DataCell(Text(consultation.patient.bloodType)),
-            DataCell(Text(consultation.situation)),
+            DataCell(
+              Text(
+                  consultation.date,
+                style: ThemeColors.mediumDarkStyle,
+              ),
+            ),
+            DataCell(Text(consultation.duration,                 style: ThemeColors.mediumDarkStyle,
+            )),
+            DataCell(Text(consultation.patient.getName(),                 style: ThemeColors.mediumDarkStyle,
+            )),
+            DataCell(Text(consultation.patient.bloodType,                 style: ThemeColors.mediumDarkStyle,
+            )),
+            DataCell(Text(consultation.situation,                 style: ThemeColors.mediumDarkStyle,
+            )),
           ],
           onSelectChanged: (newValue) {
-            Navigator.push(context, CupertinoPageRoute(builder: (_)=> ConsultationDetails(consultation: consultation)) );
+            setState(() {
+                Navigator.push(context, SharedAxisPageRoute(page: ConsultationDetails(consultation: consultation,) , transitionType: transitionType));
+            });
           },
         )
       );

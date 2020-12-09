@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:FlutterProjects/screens/home.dart';
 
@@ -16,7 +17,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(0xff84A128, ThemeColors.colorCodes),
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: 'Lato'
+        fontFamily: 'Lato',
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+              transitionType: SharedAxisTransitionType.horizontal,
+            ),
+            TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
+              transitionType: SharedAxisTransitionType.horizontal,
+            ),
+          },
+        ),
       ),
       home: HomeScreen(),
     );

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:FlutterProjects/constants/global_variables.dart';
 import 'package:FlutterProjects/constants/theme_data.dart';
 import 'package:FlutterProjects/constants/translations.dart';
 import 'package:FlutterProjects/models/consultation.dart';
@@ -50,212 +51,227 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
 
     final double headerSize = max(60,_height/30);
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: Container(
         width: _width,
         height: _height,
-        child: Column(
+        color: Colors.grey.shade50,
+        child: Row(
           children: [
-            Container(
-              color: ThemeColors.oliveLighter,
-              height: headerSize,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FlatButton(
-                    onPressed: () => Navigator.pop(context),
-                      color: Colors.transparent,
-                      splashColor: ThemeColors.oliveLight,
-                      child: Row(
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: FaIcon(
-                                  CupertinoIcons.back,
-                                  color: Colors.white,
-                              ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Consultations",
-                              style: GoogleFonts.lato(
-                                decoration: TextDecoration.underline,
-                                color: Colors.white,
-                                fontSize: 20
-                            ),),
-                          )
-                        ],
-                      )
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: _width,
-              height: _height - headerSize,
-              child: Row(
+            SingleChildScrollView(
+              child: Column(
                 children: [
                   Container(
+                    height: headerSize,
                     width: max(_width/6, 300),
-                    height: _height,
-                    decoration: BoxDecoration(
-                      color: ThemeColors.oliveLighter.withOpacity(.1),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        displayPatientInfo(widget.consultation.patient),
-                      ],
-                    )
-
-                  ),
-                  SingleChildScrollView(
-                    child: Container(
-                      width: _width - max(_width/6, 300),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FlatButton(
+                      onPressed: () => Navigator.pop(context),
+                        child: Row(
                           children: [
-                            displayMedicInfo(_height, _width),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 25.0),
-                              child: Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    menuHeader(Translations.generalInformations),
-                                    Container(
-                                      height: 50,
-                                      width: (infoTabController.length)*120.0,
-                                      child: TabBar(
-                                        controller: infoTabController,
-                                        labelStyle: TextStyle( //up to your taste
-                                            fontWeight: FontWeight.w700
-                                        ),
-                                        indicatorSize: TabBarIndicatorSize.label, //makes it better
-                                        labelColor: ThemeColors.oliveLight, //Google's sweet blue
-                                        unselectedLabelColor: ThemeColors.oliveLighter, //niceish grey
-                                        isScrollable: false, //up to your taste
-                                        indicator: MD2Indicator( //it begins here
-                                            indicatorHeight: 3,
-                                            indicatorColor: ThemeColors.oliveMid,
-                                            indicatorSize: MD2IndicatorSize.full //3 different modes tiny-normal-full
-                                        ),
-                                        tabs: <Widget>[
-                                          Container(
-                                            // width: 100,
-                                            child: Tab(
-                                              text: "Consultation",
-                                            ),
-                                          ),
-                                          Container(
-                                            // width: 60,
-                                            child: Tab(
-                                              text: "Patient",
-                                            ),
-                                          ),
-                                        ],
-
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: _width,
-                                        height: max(300, _height/4),
-                                        child: TabBarView(
-                                          controller: infoTabController,
-                                          children: [
-                                            ConsultationInfo(consultation: widget.consultation),
-                                            PersonalInfo(patient: widget.consultation.patient),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                padding: const EdgeInsets.all(8.0),
+                                child: FaIcon(
+                                    CupertinoIcons.back,
+                                    color: ThemeColors.vibrantGreen,
                                 ),
-                              ),
-                            ),
-                            Divider(
-                              color: ThemeColors.oliveLighter,
-                              height: 1,
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 25.0),
-                              child: Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    menuHeader(Translations.examinations),
-                                    Container(
-                                      height: 50,
-                                      width: (exTabController.length)*120.0,
-                                      child: TabBar(
-                                        controller: exTabController,
-                                        labelStyle: TextStyle( //up to your taste
-                                            fontWeight: FontWeight.w700
-                                        ),
-                                        indicatorSize: TabBarIndicatorSize.label, //makes it better
-                                        labelColor: ThemeColors.oliveLight, //Google's sweet blue
-                                        unselectedLabelColor: ThemeColors.oliveLighter, //niceish grey
-                                        isScrollable: false, //up to your taste
-                                        indicator: MD2Indicator( //it begins here
-                                            indicatorHeight: 3,
-                                            indicatorColor: ThemeColors.oliveMid,
-                                            indicatorSize: MD2IndicatorSize.full //3 different modes tiny-normal-full
-                                        ),
-                                        tabs: <Widget>[
-                                          Container(
-                                            // width: 100,
-                                            child: Tab(
-                                              text: "Clinical",
-                                            ),
-                                          ),
-                                          Container(
-                                            // width: 60,
-                                            child: Tab(
-                                              text: "Paraclinical",
-                                            ),
-                                          ),
-                                          Container(
-                                            // width: 60,
-                                            child: Tab(
-                                              text: "Local",
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: _width,
-                                        height: 300,
-                                        child: TabBarView(
-                                          controller: exTabController,
-                                          children: [
-                                            ConsultationInfo(consultation: widget.consultation),
-                                            ConsultationInfo(consultation: widget.consultation),
-                                            ConsultationInfo(consultation: widget.consultation),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Consultations",
+                                style: GoogleFonts.lato(
+                                  decoration: TextDecoration.underline,
+                                    color: ThemeColors.vibrantGreen,
+                                    fontSize: 20
+                              ),),
+                            )
                           ],
-                        ),
+                        )
                       ),
                     ),
-                  )
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: max(_width/6, 300),
+                        // height: _height,
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.white,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(25),
+                            bottomRight: Radius.circular(15),
+                          ),
+                          boxShadow: ThemeColors.greenShadow,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            displayPatientInfo(widget.consultation.patient),
+                          ],
+                        )
+
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
+            SingleChildScrollView(
+              child: Container(
+                width: _width - max(_width/6, 300),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      displayMedicInfo(_height, _width),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25.0,horizontal: 5.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: CupertinoColors.white,
+                            borderRadius: ThemeColors.radius25,
+                            boxShadow: ThemeColors.greenShadow,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                menuHeader(Translations.generalInformations),
+                                Container(
+                                  height: 50,
+                                  width: (infoTabController.length)*120.0,
+                                  child: TabBar(
+                                    controller: infoTabController,
+                                    labelStyle: TextStyle( //up to your taste
+                                        fontWeight: FontWeight.w700
+                                    ),
+                                    indicatorSize: TabBarIndicatorSize.label, //makes it better
+                                    labelColor: ThemeColors.vibrantGreen, //Google's sweet blue
+                                    unselectedLabelColor: ThemeColors.vibrantGreen, //niceish grey
+                                    isScrollable: false, //up to your taste
+                                    indicator: MD2Indicator( //it begins here
+                                        indicatorHeight: 3,
+                                        indicatorColor: ThemeColors.vibrantGreen,
+                                        indicatorSize: MD2IndicatorSize.full //3 different modes tiny-normal-full
+                                    ),
+                                    tabs: <Widget>[
+                                      Container(
+                                        // width: 100,
+                                        child: Tab(
+                                          text: "Consultation",
+                                        ),
+                                      ),
+                                      Container(
+                                        // width: 60,
+                                        child: Tab(
+                                          text: "Patient",
+                                        ),
+                                      ),
+                                    ],
+
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: _width,
+                                    height: max(250, _height/4),
+                                    child: TabBarView(
+                                      controller: infoTabController,
+                                      children: [
+                                        ConsultationInfo(consultation: widget.consultation),
+                                        PersonalInfo(patient: widget.consultation.patient),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: CupertinoColors.white,
+                            borderRadius: ThemeColors.radius25,
+                            boxShadow: ThemeColors.greenShadow,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                menuHeader(Translations.examinations),
+                                Container(
+                                  height: 50,
+                                  width: (exTabController.length)*120.0,
+                                  child: TabBar(
+                                    controller: exTabController,
+                                    labelStyle: TextStyle( //up to your taste
+                                        fontWeight: FontWeight.w700
+                                    ),
+                                    indicatorSize: TabBarIndicatorSize.label, //makes it better
+                                    labelColor: ThemeColors.vibrantGreen, //Google's sweet blue
+                                    unselectedLabelColor: ThemeColors.vibrantGreen, //niceish grey
+                                    isScrollable: false, //up to your taste
+                                    indicator: MD2Indicator( //it begins here
+                                        indicatorHeight: 3,
+                                        indicatorColor: ThemeColors.vibrantGreen,
+                                        indicatorSize: MD2IndicatorSize.full //3 different modes tiny-normal-full
+                                    ),
+                                    tabs: <Widget>[
+                                      Container(
+                                        // width: 100,
+                                        child: Tab(
+                                          text: "Clinical",
+                                        ),
+                                      ),
+                                      Container(
+                                        // width: 60,
+                                        child: Tab(
+                                          text: "Paraclinical",
+                                        ),
+                                      ),
+                                      Container(
+                                        // width: 60,
+                                        child: Tab(
+                                          text: "Local",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: _width,
+                                    height: 300,
+                                    child: TabBarView(
+                                      controller: exTabController,
+                                      children: [
+                                        ConsultationInfo(consultation: widget.consultation),
+                                        ConsultationInfo(consultation: widget.consultation),
+                                        ConsultationInfo(consultation: widget.consultation),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -264,128 +280,188 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
 
   displayPatientInfo(Patient patient) {
     return SingleChildScrollView(
-      child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              "https://vdm.dermatoscope.ro/web/image?model=eo.vdm.appointment&id=115&field=patient_image&unique=20200729125456"
-                          ),
-                          backgroundColor: Colors.white,
-                          minRadius: 30,
-                          maxRadius: 30,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              patient.firstName  + " " + patient.lastName,
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 23,
-                              ),
-                            ),
-                            Text(
-                              patient.birthDate.toString(),
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13,
-                              ),
-                            ),
-                            Text(
-                              patient.sex.toString(),
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.greyTextColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5.0, bottom: 15, left: 10, right: 10),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    "Patient info",
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.lato(
+                      fontSize: 25,
+                      color: ThemeColors.lightVibrantGreenColor,
+                      fontWeight: FontWeight.w700
+                    )
                 ),
               ),
-              Container(
+            ),
+            Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: ThemeColors.radius15
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: Text(
-                                "Personal information",
-                                style: GoogleFonts.lato(
-                                  color: ThemeColors.oliveMid,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: ThemeColors.vibrantGreen.withOpacity(.3),
+                            borderRadius: ThemeColors.radius15
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipOval(
+                                  child: Container(
+                                    width: 60,
+                                    height: 60,
+                                    color: ThemeColors.vibrantGreen,
+                                    child: Center(
+                                      child: FaIcon(
+                                        FontAwesomeIcons.userInjured,
+                                        color: CupertinoColors.white,
+                                      ),
+                                    )
+                                  ),
                                 ),
                               ),
-                            ),
-                            Divider(
-                              height: 1,
-                              color: ThemeColors.oliveMid,
-                            ),
-                            infoRow("Patient code", patient.pid.toString()),
-                            infoRow("Age", patient.age.toString()),
-                            infoRow("Occupation", patient.occupation.toString()),
-                            infoRow("Job address", patient.jobAddress.toString()),
-                            infoRow("Education level", patient.educationLevel.toString()),
-
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      patient.firstName  + " " + patient.lastName,
+                                      style: GoogleFonts.lato(
+                                        color: ThemeColors.vibrantGreen,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 23,
+                                      ),
+                                    ),
+                                    Text(
+                                      patient.birthDate.toString(),
+                                      style: GoogleFonts.lato(
+                                        color: ThemeColors.vibrantGreen,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Text(
+                                      patient.sex.toString(),
+                                      style: GoogleFonts.lato(
+                                        color: ThemeColors.vibrantGreen,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    Container(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Center(
-                            child: Text(
-                              "Contact information",
-                              style: GoogleFonts.lato(
-                                color: ThemeColors.oliveMid,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      "Personal information",
+                                      style: GoogleFonts.lato(
+                                        color: ThemeColors.lightVibrantGreenColor,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  infoRow("Patient code", patient.pid.toString()),
+                                  infoRow("Age", patient.age.toString()),
+                                  infoRow("Occupation", patient.occupation.toString()),
+                                  infoRow("Job address", patient.jobAddress.toString()),
+                                  infoRow("Education level", patient.educationLevel.toString()),
+
+                                ],
                               ),
                             ),
                           ),
-                          Divider(
-                            height: 1,
-                            color: ThemeColors.oliveMid,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 35),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    "Contact information",
+                                    style: GoogleFonts.lato(
+                                      color: ThemeColors.lightVibrantGreenColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                infoRow("Address", patient.address + "," + patient.country  +"," + patient.city),
+                                infoRow("Mobile phone",patient.phone),
+                                infoRow("Fax",patient.fax),
+                                infoRow("Email address",patient.email)
+                              ],
+                            ),
                           ),
-                          infoRow("Address", patient.address + "," + patient.country  +"," + patient.city),
-                          infoRow("Mobile phone",patient.phone),
-                          infoRow("Fax",patient.fax),
-                          infoRow("Email address",patient.email)
                         ],
                       ),
-                    ),
+                    )
                   ],
+                )
+            ),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 150,
+                  child: FlatButton(
+                    height: 50,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: ThemeColors.radius15
+                    ),
+                    onPressed: () => null,
+                    color: ThemeColors.vibrantGreen,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        FaIcon(
+                          FontAwesomeIcons.edit,
+                          color: CupertinoColors.white,
+                          size: 20,
+                        ),
+                        Text(
+                          "Edit patient",
+                          style: ThemeColors.mediumWhiteStyle,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              )
-            ],
-          )
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -426,7 +502,7 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
             s,
             style: GoogleFonts.lato(
                 fontSize: 25,
-                color: ThemeColors.oliveDark,
+                color: ThemeColors.lightVibrantGreenColor,
               fontWeight: FontWeight.w700
             ),
           ),
@@ -435,106 +511,94 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
   }
 
   displayMedicInfo(double _height, double _width) {
-    return Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
+    return Container(
+      height: max(210, _height/15),
+      width: _width,
+      decoration: BoxDecoration(
+        color: CupertinoColors.white,
+        borderRadius: ThemeColors.radius25,
+        boxShadow: ThemeColors.greyShadow
       ),
-      elevation: 6,
-      color: Colors.white,
-      child: Container(
-        height: max(200, _height/15),
-        width: _width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 200,
-              decoration: BoxDecoration(
-                color: ThemeColors.erondGreen,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(25.0),
-                  topLeft: Radius.circular(25.0),
-                )
-              ),
-              child: Center(
-                child: FaIcon(
-                  FontAwesomeIcons.userMd,
-                  color: Colors.white,
-                  size: 100,
-                ),
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: ThemeColors.vibrantGreen,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25.0),
+                topLeft: Radius.circular(25.0),
+              )
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FaIcon(
-                          FontAwesomeIcons.infoCircle,
-                          color: ThemeColors.greyTextColor,
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.white,
+                          borderRadius: ThemeColors.radius15
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Medic info",
-                          style: GoogleFonts.lato(
-                            color: ThemeColors.greyTextColor,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w700
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.userMd,
+                            color: ThemeColors.lightVibrantGreenColor.withOpacity(.7),
+                            size: 50,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              widget.consultation.medic.fullName(),
-                                style: ThemeColors.bigDarkStyle
+                                widget.consultation.medic.fullName(),
+                                style: ThemeColors.bigWhiteStyle
                             ),
                             Text(
-                              widget.consultation.medic.address,
-                              style: ThemeColors.mediumDarkStyle
+                                widget.consultation.medic.specialty,
+                                style: ThemeColors.mediumWhiteStyle
                             ),
                             Text(
-                              widget.consultation.medic.address,
-                              style: ThemeColors.mediumDarkStyle
+                                widget.consultation.medic.address,
+                                style: ThemeColors.mediumWhiteStyle
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FlatButton(
-                            onPressed: () {  },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            color: ThemeColors.erondGreen,
-                            splashColor: ThemeColors.oliveDark,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                    ),
+                  ],
+                ),
+                Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipOval(
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            child: FlatButton(
+                              onPressed: () {  },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                              color: ThemeColors.lightVibrantGreenColor,
+                              splashColor: ThemeColors.lightVibrantGreenColor,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -543,31 +607,27 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
                                       color: Colors.white,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        widget.consultation.medic.phone,
-                                        style: ThemeColors.mediumWhiteStyle
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FlatButton(
-                            onPressed: () {  },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            color: ThemeColors.erondGreen,
-                            splashColor: ThemeColors.oliveDark,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipOval(
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            child: FlatButton(
+                              onPressed: () {  },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                              color: ThemeColors.lightVibrantGreenColor,
+                              splashColor: ThemeColors.lightVibrantGreenColor,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -576,28 +636,27 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
                                       color: Colors.white,
                                     ),
                                   ),
-                                  Text(
-                                      widget.consultation.medic.mobilePhone,
-                                      style: ThemeColors.mediumWhiteStyle
-                                  ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FlatButton(
-                            onPressed: () {  },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            color: ThemeColors.erondGreen,
-                            splashColor: ThemeColors.eronOliveDark,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipOval(
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            child: FlatButton(
+                              onPressed: () {  },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                              color: ThemeColors.lightVibrantGreenColor,
+                              splashColor: ThemeColors.lightVibrantGreenColor,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -606,26 +665,80 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
                                       color: Colors.white,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        widget.consultation.medic.emailAddress,
-                                        style: ThemeColors.mediumWhiteStyle
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    medicInfoProperty("Phone Number", widget.consultation.medic.phone),
+                    medicInfoProperty("Mobile Number", widget.consultation.medic.mobilePhone),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    medicInfoProperty("Email address", widget.consultation.medic.emailAddress),
+                    medicInfoProperty("Fax", widget.consultation.medic.fax),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    medicInfoProperty("Address", widget.consultation.medic.address),
+                    medicInfoProperty("",""),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  medicInfoProperty(String title, String property) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+            title,
+            style: GoogleFonts.lato(
+                color: ThemeColors.greyTextColor.withOpacity(.6),
+                fontSize: 20,
+                fontWeight: FontWeight.w300
+            ),
+          ),
+          Text(
+            property,
+            style: GoogleFonts.lato(
+                color: ThemeColors.greyTextColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w400
+            ),
+          ),
+        ],
       ),
     );
   }
