@@ -38,6 +38,9 @@ dependencies:
   simple_animations: ^2.4.2
   expandable: ^4.1.4
   flutter_staggered_animations: ^0.1.2
+  draggable_scrollbar: ^0.0.4
+  flutter_web_scrollbar: ^0.0.3
+  carousel_slider: ^2.3.1
 
 dev_dependencies:
   flutter_test:

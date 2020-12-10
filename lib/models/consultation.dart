@@ -1,3 +1,4 @@
+import 'package:FlutterProjects/models/image.dart';
 import 'package:FlutterProjects/models/medical_person.dart';
 import 'package:FlutterProjects/models/patient.dart';
 
@@ -11,6 +12,8 @@ class Consultation{
     String hour;
     String duration;
 
+    //images
+    List<Image> images;
     //anamneza - kortortenet
     String hospitalizationType;
     List<String> hospitalizationReasons;
@@ -28,6 +31,7 @@ class Consultation{
         this.patient,
         this.medic,
       [
+      this.images,
       this.situation = "Confirmed",
       this.date = "2020-08-08",
       this.finishDate = "2020-08-09 15:50",

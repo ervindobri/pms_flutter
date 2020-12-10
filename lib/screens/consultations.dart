@@ -215,9 +215,7 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
             )),
           ],
           onSelectChanged: (newValue) {
-            setState(() {
-                Navigator.push(context, SharedAxisPageRoute(page: ConsultationDetails(consultation: consultation,) , transitionType: transitionType));
-            });
+              Navigator.push(context, CupertinoPageRoute(builder:(_) => ConsultationDetails(consultation: consultation,)));
           },
         )
       );
