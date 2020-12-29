@@ -1,14 +1,15 @@
 import 'dart:math';
 
-import 'package:FlutterProjects/constants/global_variables.dart';
-import 'package:FlutterProjects/constants/theme_data.dart';
-import 'package:FlutterProjects/helpers/sharedaxisroute.dart';
-import 'package:FlutterProjects/models/patient.dart';
+import 'package:flutter_projects/constants/global_variables.dart';
+import 'package:flutter_projects/constants/theme_data.dart';
+import 'package:flutter_projects/helpers/sharedaxisroute.dart';
+import 'package:flutter_projects/models/patient.dart';
+import 'package:flutter_projects/network/vdm_network.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animations/animations.dart';
-
+import 'package:http/http.dart';
 import 'consultation_details.dart';
 
 class ConsulationScreen extends StatefulWidget {
@@ -32,6 +33,16 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
       SharedAxisTransitionType.horizontal;
 
   Widget selectedWidget;
+
+  var x;
+
+  @override
+  void initState() {
+    super.initState();
+    // x = VDMNetwork().postRequest();
+
+    VDMNetwork().postRequest();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,70 +103,79 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
                           color: CupertinoColors.white,
                           boxShadow: greenShadow
                       ),
-                      child:DataTable(
-                        sortColumnIndex: _currentSortIndex,
-                        sortAscending: _sortAsc,
-                        dataRowHeight: 65,
-                        headingTextStyle: ThemeColors.thickLightStyle,
-                        headingRowHeight: 100,
-                        showBottomBorder: true,
-                        showCheckboxColumn: false, // <-- this is important
-                        columns: [
-                          DataColumn(
-                              label: Text(
-                                'Date',
-                                style: ThemeColors.thickDarkstyle,
-                              ),
-                              onSort: (columnIndex, sortAscending){
+                      child:FutureBuilder(
+                        future: Future(null),
+                        builder: (context, snapshot) {
+                          print(snapshot.error);
+                          if ( snapshot.hasData){
+                            print(snapshot.data);
+                          }
+                          return DataTable(
+                            sortColumnIndex: _currentSortIndex,
+                            sortAscending: _sortAsc,
+                            dataRowHeight: 65,
+                            headingTextStyle: ThemeColors.thickLightStyle,
+                            headingRowHeight: 100,
+                            showBottomBorder: true,
+                            showCheckboxColumn: false, // <-- this is important
+                            columns: [
+                              DataColumn(
+                                  label: Text(
+                                    'Date',
+                                    style: ThemeColors.thickDarkstyle,
+                                  ),
+                                  onSort: (columnIndex, sortAscending){
 
-                                setState(() {
-                                  _currentSortIndex = columnIndex;
-                                  _sortAsc = sortAscending;
-                                  GlobalVariables.dummyConsultations.sort((a, b) => a.date.compareTo(b.date));
-                                  if (!sortAscending) {
-                                    GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
+                                    setState(() {
+                                      _currentSortIndex = columnIndex;
+                                      _sortAsc = sortAscending;
+                                      GlobalVariables.dummyConsultations.sort((a, b) => a.date.compareTo(b.date));
+                                      if (!sortAscending) {
+                                        GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
+                                      }
+                                    });
                                   }
-                                });
-                              }
-                          ),
-                          DataColumn(
-                            label: Text('Duration', style: ThemeColors.thickDarkstyle,),
-                            onSort: (columnIndex, sortAscending) {
-                              setState(() {
-                                _currentSortIndex = columnIndex;
-                                _sortAsc = sortAscending;
+                              ),
+                              DataColumn(
+                                label: Text('Duration', style: ThemeColors.thickDarkstyle,),
+                                onSort: (columnIndex, sortAscending) {
+                                  setState(() {
+                                    _currentSortIndex = columnIndex;
+                                    _sortAsc = sortAscending;
 
-                                GlobalVariables.dummyConsultations.sort((a, b) => a.duration.toLowerCase().compareTo(b.duration.toLowerCase()));
-                                if (!sortAscending) {
-                                  GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
-                                }
-                                print(sortAscending);
-                              });
-                            },
-                          ),
-                          DataColumn(
-                            label: Text('Patient', style: ThemeColors.thickDarkstyle,),
-                            tooltip: "First and last name of the patient",
-                            onSort: (columnIndex, sortAscending) {
-                              setState(() {
-                                _currentSortIndex = columnIndex;
-                                _sortAsc = sortAscending;
+                                    GlobalVariables.dummyConsultations.sort((a, b) => a.duration.toLowerCase().compareTo(b.duration.toLowerCase()));
+                                    if (!sortAscending) {
+                                      GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
+                                    }
+                                    print(sortAscending);
+                                  });
+                                },
+                              ),
+                              DataColumn(
+                                label: Text('Patient', style: ThemeColors.thickDarkstyle,),
+                                tooltip: "First and last name of the patient",
+                                onSort: (columnIndex, sortAscending) {
+                                  setState(() {
+                                    _currentSortIndex = columnIndex;
+                                    _sortAsc = sortAscending;
 
-                                GlobalVariables.dummyConsultations.sort((a, b) => a.patient.firstName.toLowerCase().compareTo(b.patient.firstName.toLowerCase()));
-                                if (!sortAscending) {
-                                  GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
-                                }
-                              });
-                            },
-                          ),
-                          DataColumn(label: Text(
-                              'Blood Type',style: ThemeColors.thickDarkstyle)
-                          ),
-                          DataColumn(label: Text('Situation',style: ThemeColors.thickDarkstyle)
-                          ),
+                                    GlobalVariables.dummyConsultations.sort((a, b) => a.patient.firstName.toLowerCase().compareTo(b.patient.firstName.toLowerCase()));
+                                    if (!sortAscending) {
+                                      GlobalVariables.dummyConsultations = GlobalVariables.dummyConsultations.reversed.toList();
+                                    }
+                                  });
+                                },
+                              ),
+                              DataColumn(label: Text(
+                                  'Blood Type',style: ThemeColors.thickDarkstyle)
+                              ),
+                              DataColumn(label: Text('Situation',style: ThemeColors.thickDarkstyle)
+                              ),
 
-                        ],
-                        rows: createTableRows(),
+                            ],
+                            rows: createTableRows(),
+                          );
+                        }
                       ),
                     ),
                   ),

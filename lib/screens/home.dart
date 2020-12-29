@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:FlutterProjects/constants/global_variables.dart';
-import 'package:FlutterProjects/constants/theme_data.dart';
-import 'package:FlutterProjects/screens/consultations.dart';
-import 'package:FlutterProjects/screens/patients.dart';
+import 'package:flutter_projects/constants/global_variables.dart';
+import 'package:flutter_projects/constants/theme_data.dart';
+import 'package:flutter_projects/screens/consultations.dart';
+import 'package:flutter_projects/screens/patients.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sidenavbar/sidenavbar.dart';
@@ -63,7 +63,7 @@ class _MyAppState extends State<HomeScreen> {
             maxWidth: 270,
             borderRadius: 15,
             iconSize: 40,
-            textSize: 20,
+            // textSize: 20,
             toggleButtonIcon: Icons.chevron_right,
             selectedIconBox: ThemeColors.erondGreen.withOpacity(.5),
             backgroundColor: ThemeColors.vibrantGreen.withOpacity(.7),
@@ -74,7 +74,7 @@ class _MyAppState extends State<HomeScreen> {
             duration: Duration(milliseconds: 500),
             curve: Curves.fastLinearToSlowEaseIn,
             screenPadding: 4,
-            showCollapseButton: true,
+            // showCollapseButton: true,
           );
   }
   Widget _body(Size size, BuildContext context) {

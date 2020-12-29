@@ -1,6 +1,6 @@
 
 
-class Image{
+class DermaImage{
   String fileName;
   String url;
   String localization;
@@ -9,7 +9,7 @@ class Image{
   double tDSM;
   double tDSS;
 
-  Image(this.fileName, this.url, this.localization,[ this.description = "", this.date = "",
+  DermaImage(this.fileName, this.url, this.localization,[ this.description = "", this.date = "",
       this.tDSM = 0.0, this.tDSS = 0.0]);
 
   @override

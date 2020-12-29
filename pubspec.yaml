@@ -1,4 +1,4 @@
-name: FlutterProjects
+name: flutter_projects
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -41,6 +41,16 @@ dependencies:
   draggable_scrollbar: ^0.0.4
   flutter_web_scrollbar: ^0.0.3
   carousel_slider: ^2.3.1
+  http: ^0.12.2
+  dio: ^3.0.10
+  odoo_rpc: ^0.3.0
+  odoo_api: ^1.0.4
+  responsive_table: ^0.1.1+8
+
+  flutter_stetho:
+    git:
+      url: git://github.com/jasonlewicki/flutter_stetho.git
+      ref: master
 
 dev_dependencies:
   flutter_test:

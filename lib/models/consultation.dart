@@ -1,6 +1,6 @@
-import 'package:FlutterProjects/models/image.dart';
-import 'package:FlutterProjects/models/medical_person.dart';
-import 'package:FlutterProjects/models/patient.dart';
+import 'package:flutter_projects/models/image.dart';
+import 'package:flutter_projects/models/medical_person.dart';
+import 'package:flutter_projects/models/patient.dart';
 
 class Consultation{
   final Patient patient;
@@ -13,7 +13,7 @@ class Consultation{
     String duration;
 
     //images
-    List<Image> images;
+    List<DermaImage> images;
     //anamneza - kortortenet
     String hospitalizationType;
     List<String> hospitalizationReasons;

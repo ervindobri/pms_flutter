@@ -1,10 +1,10 @@
 import 'dart:math';
-import 'package:FlutterProjects/constants/theme_data.dart';
-import 'package:FlutterProjects/constants/translations.dart';
-import 'package:FlutterProjects/models/consultation.dart';
-import 'package:FlutterProjects/models/patient.dart';
-import 'package:FlutterProjects/tabs/general_info/consultation_info.dart';
-import 'package:FlutterProjects/tabs/general_info/personal_info.dart';
+import 'package:flutter_projects/constants/theme_data.dart';
+import 'package:flutter_projects/constants/translations.dart';
+import 'package:flutter_projects/models/consultation.dart';
+import 'package:flutter_projects/models/patient.dart';
+import 'package:flutter_projects/tabs/general_info/consultation_info.dart';
+import 'package:flutter_projects/tabs/general_info/personal_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';

@@ -1,10 +1,12 @@
+import 'package:flutter_projects/screens/view_example.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:FlutterProjects/screens/home.dart';
-
+import 'package:flutter_projects/screens/home.dart';
+import 'package:flutter_stetho/flutter_stetho.dart';
 import 'constants/theme_data.dart';
 
 void main() {
+  Stetho.initialize();
   runApp(MyApp());
 }
 
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
           },
         ),
       ),
-      home: HomeScreen(),
+      // home: HomeScreen(),
+      home: SwitchViewExample()
     );
   }
 }
