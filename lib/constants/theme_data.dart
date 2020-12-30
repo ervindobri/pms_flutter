@@ -85,4 +85,6 @@ class ThemeColors{
         )];
 
   static var lightVibrantGreenColor = const Color(0xff4ecc97);
+
+  static var almostBlack = const Color(0xff2f2f31);
 }

@@ -24,21 +24,25 @@ class Task{
       this.priority, this.status);
 
   getStatusLabel() {
-    // IconData icon = FontAwesomeIcons.arrowUp;
+    IconData icon = FontAwesomeIcons.checkCircle;
      var labelColor = null;
     String label = "Done";
     switch(this.status){
 
       case Status.BACKLOG:
         label = "Backlog";
-        labelColor = Colors.blueGrey ;
+        icon = FontAwesomeIcons.layerGroup;
+        labelColor = Colors.blueGrey;
         break;
       case Status.TO_DO:
         label = "To Do";
+        icon = FontAwesomeIcons.thumbtack;
         labelColor = Colors.blue;
         break;
       case Status.IN_PROGRESS:
         label = "In Progress";
+        icon = FontAwesomeIcons.spinner;
+
         labelColor = Colors.blue;
         break;
       case Status.DONE:
@@ -46,7 +50,7 @@ class Task{
         labelColor = Colors.green;
         break;
     }
-    return [label, labelColor];
+    return [label, labelColor, icon];
   }
 
   getPriority() {
@@ -65,7 +69,7 @@ class Task{
         iconColor = Colors.green;
         break;
       case Priority.MEDIUM:
-        icon = FontAwesomeIcons.medium;
+        icon = FontAwesomeIcons.arrowUp;
         label = "Medium";
         iconColor = Colors.orange;
         break;

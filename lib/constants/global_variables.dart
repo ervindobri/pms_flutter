@@ -66,7 +66,7 @@ class GlobalVariables {
   static List<Task> dummyTasks = [
     Task.name(1, "Do this", "W", "Dobri Ervin", "Dobri Ervin", Priority.MEDIUM, Status.TO_DO),
     Task.name(2, "Drink Water", "", "Dobri Ervin", "Dobri Ervin", Priority.VERY_HIGH, Status.DONE),
-    Task.name(3, "Stand up every hour", "You need to do this to not fuck up your back", "Dobri Ervin", "Dobri Ervin", Priority.HIGH, Status.IN_PROGRESS),
+    Task.name(3, "Stand up every hour", "You need to do this to not #@!% up your back", "Dobri Ervin", "Dobri Ervin", Priority.HIGH, Status.IN_PROGRESS),
     Task.name(4, "Visit your grandma sometimes", "No description needed", "Dobri Ervin", "Dobri Ervin", Priority.LOW, Status.TO_DO),
     Task.name(5, "EAt healthy stuff!!!", "Title", "Dobri Ervin", "Dobri Ervin", Priority.VERY_LOW, Status.BACKLOG),
   ];
@@ -104,7 +104,7 @@ class GlobalVariables {
               child: Text(
                 list.first,
                 style: GoogleFonts.lato(
-                    color: list.last,
+                    color: list[1],
                     fontWeight: FontWeight.w700
                 ),
               ),
@@ -160,5 +160,17 @@ class GlobalVariables {
         },
         textAlign: TextAlign.left),
   ];
+  static Map<int,dynamic> columnTaskNames = {
+    0 : ["Backlog", Colors.blueGrey, FontAwesomeIcons.layerGroup],
+    1 : ["To Do", Colors.blue, FontAwesomeIcons.thumbtack],
+    2 : ["In Progress", Colors.blueAccent, FontAwesomeIcons.spinner],
+    3 : ["Done", Colors.greenAccent, FontAwesomeIcons.checkCircle],
+  };
+  static Map<int,dynamic> columnTasks = {
+    0 : GlobalVariables.dummyTasks.where((element) => element.status == Status.BACKLOG).toList(),
+    1 : GlobalVariables.dummyTasks.where((element) => element.status == Status.TO_DO).toList(),
+    2 : GlobalVariables.dummyTasks.where((element) => element.status == Status.IN_PROGRESS).toList(),
+    3 : GlobalVariables.dummyTasks.where((element) => element.status == Status.DONE).toList(),
+  };
 
 }

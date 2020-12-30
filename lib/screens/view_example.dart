@@ -1,19 +1,27 @@
 import 'dart:math';
 
+import 'package:flutter/rendering.dart';
 import 'package:flutter_projects/constants/global_variables.dart';
+import 'package:flutter_projects/constants/theme_data.dart';
 import 'package:flutter_projects/models/task.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/tasks/kanban_view.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_table/responsive_table.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:simple_animations/simple_animations.dart';
+
+import 'kanban_test.dart';
 
 class SwitchViewExample extends StatefulWidget {
   @override
   _SwitchViewExampleState createState() => _SwitchViewExampleState();
 }
 
-class _SwitchViewExampleState extends State<SwitchViewExample> {
+class _SwitchViewExampleState extends State<SwitchViewExample> with AnimationMixin {
   static const Color blue = Color(0xff0052cc);
 
   List<int> _perPages = [5, 10, 15, 100];
@@ -85,8 +93,10 @@ class _SwitchViewExampleState extends State<SwitchViewExample> {
               Container(
                 width: width,
                 height: 50,
-                decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                  BoxShadow(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                    BoxShadow(
                       color: Colors.grey,
                       blurRadius: 5,
                       spreadRadius: -2,
@@ -99,77 +109,84 @@ class _SwitchViewExampleState extends State<SwitchViewExample> {
                   // color: Colors.grey.withAlpha(50),
                   width: width * .8,
                   height: height,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            FlatButton(
-                              onPressed: () {
-                                //TODO: open dialog to create task
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              hoverColor: Colors.white.withOpacity(.2),
-                              color: blue,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Create",
-                                  style: GoogleFonts.lato(
-                                      color: Colors.white, fontSize: 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              FlatButton(
+                                onPressed: () {
+                                  //TODO: open dialog to create task
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                hoverColor: Colors.white.withOpacity(.2),
+                                color: blue,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Create",
+                                    style: GoogleFonts.lato(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
                                 ),
                               ),
-                            ),
-                            FlatButton(
-                              onPressed: () {
-                                //TODO: switch view
-                                setState(() {
-                                  if ( _currentView < _maxView){
-                                    _currentView++;
-                                  }
-                                  else{
-                                    _currentView = 1;
-                                  }
-                                });
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              hoverColor: blue.withOpacity(.1),
-                              color: Colors.grey.shade300,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Switch view",
-                                      style: GoogleFonts.lato(
-                                          color: Colors.black, fontSize: 15),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: FaIcon(
-                                        FontAwesomeIcons.listAlt,
-                                        size: 20,
+                              FlatButton(
+                                onPressed: () {
+                                  //TODO: switch view
+                                  setState(() {
+                                    if ( _currentView < _maxView){
+                                      _currentView++;
+                                    }
+                                    else{
+                                      _currentView = 1;
+                                    }
+                                  });
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                hoverColor: blue.withOpacity(.1),
+                                color: Colors.grey.shade300,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                        child: Text(
+                                          "Switch view",
+                                          style: GoogleFonts.lato(
+                                              color: Colors.black, fontSize: 15),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                        child: FaIcon(
+                                          FontAwesomeIcons.listAlt,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: getCurrentView(),
-                      ),
-                    ],
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 300),
+                          reverseDuration: Duration(milliseconds: 300),
+                          switchInCurve: Curves.easeInOut,
+                          child: getCurrentView(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -311,17 +328,260 @@ class _SwitchViewExampleState extends State<SwitchViewExample> {
     );
   }
 
+  createGridView(){
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+      return SingleChildScrollView(
+        child: Container(
+            width: width * .8,
+            height: height,
+            child: AnimationLimiter(
+              child: new StaggeredGridView.countBuilder(
+                crossAxisCount: 4,
+                itemCount: GlobalVariables.dummyTasks.length,
+                itemBuilder: (BuildContext context, int index) =>
+                AnimationConfiguration.staggeredGrid(
+                  position: index,
+                  duration: Duration(milliseconds: 500+(index*100)),
+                  columnCount: 4,
+                  child: SlideAnimation(
+                    verticalOffset: -20,
+                    child: FadeInAnimation(
+                      child: InkWell(
+                        onTap: () => print("kecske"),
+                        onHover: (hovered) => null,
+                        child: Card(
+                          elevation: 10,
+                          shadowColor: Colors.black.withOpacity(.15),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                                color: Colors.white,
+                                height: 150,
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(18.0),
+                                      child: Column(
+                                        crossAxisAlignment:CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              '${GlobalVariables.dummyTasks[index].name}',
+                                            textAlign: TextAlign.left,
+                                            style: GoogleFonts.lato(
+                                              color: ThemeColors.almostBlack,
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.w900
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 50,
+                                            child: Text(
+                                              '${GlobalVariables.dummyTasks[index].description}',
+                                              style: GoogleFonts.lato(
+                                                  color: ThemeColors.almostBlack,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w300
+                                              ),
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 0,
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            color: GlobalVariables.dummyTasks[index].getStatusLabel()[1],
+                                            borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10.0),
+                                          )
+                                        ),
+                                        child: Center(
+                                          child: FaIcon(
+                                              GlobalVariables.dummyTasks[index].getStatusLabel()[2],
+                                              color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      // alignment: Alignment.bottomCenter,
+                                      bottom: 50,
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Container(
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        'Assignee',
+                                                        style: GoogleFonts.lato(
+                                                            color: ThemeColors.almostBlack,
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w700
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: [
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              shape: BoxShape.circle
+                                                          ),
+                                                          child: FaIcon(
+                                                            FontAwesomeIcons.userCircle,
+                                                            color: ThemeColors.almostBlack,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: Text(
+                                                            '${GlobalVariables.dummyTasks[index].assignee}',
+                                                            style: GoogleFonts.lato(
+                                                                color: ThemeColors.almostBlack,
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w300
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+
+
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        'Reporter',
+                                                        style: GoogleFonts.lato(
+                                                            color: ThemeColors.almostBlack,
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w700
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: [
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              shape: BoxShape.circle
+                                                          ),
+                                                          child: FaIcon(
+                                                            FontAwesomeIcons.userCircle,
+                                                            color: ThemeColors.almostBlack,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: Text(
+                                                            '${GlobalVariables.dummyTasks[index].reporter}',
+                                                            style: GoogleFonts.lato(
+                                                                color: ThemeColors.almostBlack,
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w300
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+
+
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Container(
+                                            color: (GlobalVariables.dummyTasks[index].getPriority()[2]).withOpacity(0.2),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    GlobalVariables.dummyTasks[index].getPriority()[0],
+                                                    style: GoogleFonts.lato(
+                                                        color: (GlobalVariables.dummyTasks[index].getPriority()[2]).withOpacity(1),
+
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w300
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: FaIcon(
+                                                    GlobalVariables.dummyTasks[index].getPriority()[1],
+                                                    color: (GlobalVariables.dummyTasks[index].getPriority()[2]).withOpacity(1),
+
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                staggeredTileBuilder: (int index) =>
+                new StaggeredTile.count(1, 1.2),
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 4.0,
+              ),
+            ),
+        ),
+      );
+  }
   getCurrentView() {
     switch(this._currentView){
       case 1:
+        //List View
         return createDataTable();
         break;
       case 2:
-        return Container();
+        //Card View
+        return createGridView();
         break;
       case 3:
-        return Container();
+        //KanBan View
+        return createKanbanView();
         break;
     }
+  }
+
+  createKanbanView() {
+    return KanbanView();
   }
 }
