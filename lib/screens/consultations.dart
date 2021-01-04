@@ -41,7 +41,8 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
     super.initState();
     // x = VDMNetwork().postRequest();
 
-    VDMNetwork().postRequest();
+    VDMNetwork().postTry();
+    print("POST SENT!");
   }
 
   @override

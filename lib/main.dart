@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
           },
         ),
       ),
-      // home: HomeScreen(),
-      home: SwitchViewExample()
+      home: HomeScreen(),
+      // home: SwitchViewExample()
     );
   }
 }

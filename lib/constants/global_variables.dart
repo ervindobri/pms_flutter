@@ -83,7 +83,6 @@ class GlobalVariables {
         show: true,
         flex: 2,
         sortable: true,
-        editable:true,
         textAlign: TextAlign.left),
     DatatableHeader(
         text: "Description",

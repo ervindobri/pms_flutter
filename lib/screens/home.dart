@@ -19,8 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _MyAppState extends State<HomeScreen> {
   List<CollapsibleItem> _items;
   String _headline;
-  NetworkImage _avatarImg =
-  NetworkImage('https://www.w3schools.com/howto/img_avatar.png');
+  NetworkImage _avatarImg = NetworkImage('https://www.w3schools.com/howto/img_avatar.png');
 
   Widget currentScreen = ConsulationScreen();
 

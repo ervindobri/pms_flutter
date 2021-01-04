@@ -29,7 +29,7 @@ class VDMNetwork{
 
   postRequest() async {
     // Restore session ID from storage and pass it to client constructor.
-    final baseUrl = 'http://vmi461243.contaboserver.net:8069/';
+    // final baseUrl = 'http://vmi461243.contaboserver.net:8069/';
     // Subscribe to session changes to store most recent one
     dio.options = baseOptions;
     final authURL = "web/session/authenticate/";
@@ -40,17 +40,12 @@ class VDMNetwork{
         "db": "vdmtest"
       }
     };
-
-    var auth = await dio.post(authURL, data: body, options: Options(headers: {
-      'Content-Type': 'application/json'
-    },
-    ));
-
+    var auth = await dio.post(authURL, data: body, options: Options(headers: {'Content-Type': 'application/json'},));
     var response = json.decode(auth.data);
     var session_id = response["result"]["session_id"];
-    // print(response);
+    print(response);
 
-    final dataURL = "web/dataset/search_read";
+    final dataURL = "/web/dataset/search_read";
     body = {
       "jsonrpc": "2.0",
       "method": "call",
@@ -81,16 +76,40 @@ class VDMNetwork{
     };
     var data = await dio.post(
         dataURL,
-        data: jsonEncode(body),
+        data: body,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
-            'Cookie': 'session_id= + $session_id; Path=/; Domain=.vmi461243.contaboserver.net; Expires=Mon, 15 Mar 2021 15:45:46 GMT;',
+            'Content-Length' : 337,
+            'Cookie': 'session_id= + $session_id',
+            'Connection' : 'keep-alive',
             },
 
         )
     );
     print(data.data);
+    return data.data;
+  }
+
+  postTry() async {
+    var headers = {
+      'Cookie': 'session_id=f004addb85b41d88751580a7a2a625a433f53bc2;',
+      'Content-Type': 'application/json',
+      "Access-Control-Allow-Origin" : "*",
+      'Content-Length' : '274'
+    };
+    var request = http.Request('POST', Uri.parse('https://vmi461243.contaboserver.net:8069/web/dataset/search_read'));
+    request.body = '''{"jsonrpc":"2.0","method":"call","params":{"model":"eo.vdm.patient","fields":["name","physician_id","birth_date","age","phone","count_appointment_ids","count_dossier_item_ids"],"domain":[],"context":{"lang":"en_US","tz":"Europe/Bucharest","uid":48,"params":{"action":115},"bin_size":true},"offset":0,"limit":80,"sort":""},"id":201088730}''';
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    }
+    else {
+    print(response.reasonPhrase);
+    }
   }
 
 }
