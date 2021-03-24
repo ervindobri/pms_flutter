@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/constants/global_variables.dart';
@@ -8,6 +9,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class KanbanView extends StatefulWidget {
+  final List<dynamic>? data;
+  final int? columns;
+  final Color? columnColor;
+  const KanbanView({Key? key,  this.data, this.columns, this.columnColor}) : super(key: key);
   @override
   _KanbanViewState createState() => _KanbanViewState();
 }
@@ -18,6 +23,7 @@ class _KanbanViewState extends State<KanbanView> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
 
     return SingleChildScrollView(
       child: Container(
@@ -59,8 +65,8 @@ class _KanbanViewState extends State<KanbanView> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: FaIcon(
-                                            GlobalVariables.columnTaskNames[index].last,
-                                            color: ThemeColors.almostBlack,
+                                          GlobalVariables.columnTaskNames[index].last,
+                                          color: ThemeColors.almostBlack,
                                         ),
                                       ),
                                       Padding(
@@ -166,5 +172,66 @@ class _KanbanViewState extends State<KanbanView> {
         ),
       ),
     );
+    //ERP ORDERS
+    // return Padding(
+    //   padding: const EdgeInsets.all(8.0),
+    //   child: Container(
+    //     width: width,
+    //     height: height,
+    //     color: Colors.white,
+    //     child: Row(
+    //       children: List.generate(SalesForceGlobals.leadColumnNames.length, (index) {
+    //         int nrLeads = widget.data.where((element) => element.status == SalesForceGlobals.leadColumnNames[index].last).toList().length;
+    //         return Expanded(
+    //           child: Container(
+    //             width: width/SalesForceGlobals.leadColumnNames.length,
+    //             height: height,
+    //             decoration: BoxDecoration(
+    //               border: Border.all(color: SalesForceGlobals.textColor.withOpacity(.2)),
+    //             ),
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.start,
+    //               children: [
+    //                 Container(
+    //                   height:40,
+    //                   width: width/SalesForceGlobals.leadColumnNames.length,
+    //                   decoration: BoxDecoration(
+    //                       color: SalesForceGlobals.blueColor,
+    //                       borderRadius: BorderRadius.circular(25)
+    //                   ),
+    //                   child: Center(
+    //                     child: AutoSizeText(
+    //                       "${SalesForceGlobals.leadColumnNames[index].first}   ($nrLeads)",
+    //                       maxLines: 1,
+    //                       style: GoogleFonts.openSans(
+    //                           color: Colors.white,
+    //                           fontWeight: FontWeight.w500
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ),
+    //                 Expanded(
+    //                   flex: 1,
+    //                   child: SingleChildScrollView(
+    //                     child: Column(
+    //                       children: List.generate(widget.data.where((element) => element.status == SalesForceGlobals.leadColumnNames[index].last).toList().length,
+    //                               (lindex) => LeadCard(lead: widget.data[index]),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 )
+    //
+    //               ],
+    //             ),
+    //           ),
+    //         );
+    //       }
+    //
+    //       ),
+    //     )
+    //   ),
+    // );
+    //TODOS
+
   }
 }

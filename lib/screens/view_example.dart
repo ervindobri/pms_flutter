@@ -1,22 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/rendering.dart';
-import 'package:flutter_projects/constants/global_variables.dart';
-import 'package:flutter_projects/constants/theme_data.dart';
-import 'package:flutter_projects/models/task.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/network/vdm_network.dart';
 import 'package:flutter_projects/tasks/card_view.dart';
 import 'package:flutter_projects/tasks/kanban_view.dart';
-import 'package:flutter_projects/tasks/table_view.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_table/responsive_table.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:simple_animations/simple_animations.dart';
 
-import 'kanban_test.dart';
 
 class SwitchViewExample extends StatefulWidget {
   @override
@@ -36,6 +26,12 @@ class _SwitchViewExampleState extends State<SwitchViewExample> {
     super.dispose();
   }
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -74,8 +70,11 @@ class _SwitchViewExampleState extends State<SwitchViewExample> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               FlatButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   //TODO: open dialog to create task
+                                  print("Sending req!");
+                                  // VDMNetwork().postRequest();
+                                  await VDMNetwork().postTry();
                                 },
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5)),
@@ -134,11 +133,14 @@ class _SwitchViewExampleState extends State<SwitchViewExample> {
                             ],
                           ),
                         ),
-                        AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
-                          reverseDuration: Duration(milliseconds: 300),
-                          switchInCurve: Curves.easeInOut,
-                          child: getCurrentView(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom:100.0),
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            reverseDuration: Duration(milliseconds: 300),
+                            switchInCurve: Curves.easeInOut,
+                            child: getCurrentView(),
+                          ),
                         ),
                       ],
                     ),
@@ -153,7 +155,7 @@ class _SwitchViewExampleState extends State<SwitchViewExample> {
   }
 
   createDataTable() {
-    return TableView();
+    return Container();
   }
 
   createGridView(){

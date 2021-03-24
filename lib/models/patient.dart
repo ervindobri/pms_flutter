@@ -16,12 +16,12 @@ class Patient{
   String educationLevel = "none";
 
   //Medical info
-  String bloodType;
-  String RH;
-  double waistSize;
-  double weight;
-  String diseases;
-  String allergies;
+  String? bloodType;
+  String? RH;
+  double? waistSize;
+  double? weight;
+  String? diseases;
+  String? allergies;
 
   //contact information
   String address = "street";
@@ -29,9 +29,9 @@ class Patient{
   String country = "Spain";
   String state = "";
   String zipCode = "226933";
-  String phone;
-  String fax;
-  String email;
+  String? phone;
+  String? fax;
+  String? email;
 
   Patient(
       this.pid,
@@ -62,20 +62,20 @@ class Patient{
       );
 
   Patient.name({
-      this.pid,
-      this.firstName,
-      this.lastName,
-      this.birthDate,
-      this.age,
-      this.sex,
-      this.occupation,
-      this.jobAddress,
-      this.educationLevel,
-      this.address,
-      this.city,
-      this.country,
-      this.state,
-      this.zipCode});
+      required this.pid,
+      required this.firstName,
+      required this.lastName,
+      required this.birthDate,
+      required this.age,
+      required this.sex,
+      required this.occupation,
+      required this.jobAddress,
+      required this.educationLevel,
+      required this.address,
+      required this.city,
+      required this.country,
+      required this.state,
+      required this.zipCode});
 
   String getName() {
     return this.firstName + " " + this.lastName;

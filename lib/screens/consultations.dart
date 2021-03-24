@@ -32,17 +32,13 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
   SharedAxisTransitionType transitionType =
       SharedAxisTransitionType.horizontal;
 
-  Widget selectedWidget;
+  late Widget selectedWidget;
 
   var x;
 
   @override
   void initState() {
     super.initState();
-    // x = VDMNetwork().postRequest();
-
-    VDMNetwork().postTry();
-    print("POST SENT!");
   }
 
   @override
@@ -104,14 +100,7 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
                           color: CupertinoColors.white,
                           boxShadow: greenShadow
                       ),
-                      child:FutureBuilder(
-                        future: Future(null),
-                        builder: (context, snapshot) {
-                          print(snapshot.error);
-                          if ( snapshot.hasData){
-                            print(snapshot.data);
-                          }
-                          return DataTable(
+                      child: DataTable(
                             sortColumnIndex: _currentSortIndex,
                             sortAscending: _sortAsc,
                             dataRowHeight: 65,
@@ -175,8 +164,7 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
 
                             ],
                             rows: createTableRows(),
-                          );
-                        }
+
                       ),
                     ),
                   ),
@@ -230,7 +218,7 @@ class _ConsulationScreenState extends State<ConsulationScreen> {
             )),
             DataCell(Text(consultation.patient.getName(),                 style: ThemeColors.mediumDarkStyle,
             )),
-            DataCell(Text(consultation.patient.bloodType,                 style: ThemeColors.mediumDarkStyle,
+            DataCell(Text(consultation.patient.bloodType!,                 style: ThemeColors.mediumDarkStyle,
             )),
             DataCell(Text(consultation.situation,                 style: ThemeColors.mediumDarkStyle,
             )),

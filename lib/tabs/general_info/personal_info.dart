@@ -8,7 +8,7 @@ class PersonalInfo extends StatelessWidget {
   final Patient patient;
 
 
-  const PersonalInfo({Key key, this.patient}) : super(key: key);
+  const PersonalInfo({Key? key, required this.patient}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
@@ -30,7 +30,7 @@ class PersonalInfo extends StatelessWidget {
                     style: ThemeColors.thickDarkstyle,
                   ),
                   Text(
-                    patient.bloodType,
+                    patient.bloodType!,
                     style: ThemeColors.mediumDarkStyle,
                   ),
                 ],
@@ -50,7 +50,7 @@ class PersonalInfo extends StatelessWidget {
                     style: ThemeColors.thickDarkstyle,
                   ),
                   Text(
-                    patient.RH,
+                    patient.RH!,
                     style: ThemeColors.mediumDarkStyle,
                   ),
                 ],
@@ -71,7 +71,7 @@ class PersonalInfo extends StatelessWidget {
                     style: ThemeColors.thickDarkstyle,
                   ),
                   Text(
-                    patient.diseases,
+                    patient.diseases!,
                     style: ThemeColors.mediumDarkStyle,
                   ),
                 ],
@@ -92,7 +92,7 @@ class PersonalInfo extends StatelessWidget {
                     style: ThemeColors.thickDarkstyle,
                   ),
                   Text(
-                    patient.allergies,
+                    patient.allergies!,
                     style: ThemeColors.mediumDarkStyle,
                   ),
                 ],

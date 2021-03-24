@@ -8,7 +8,7 @@ class Item {
   String listId;
   final String title;
 
-  Item({this.id, this.listId, this.title});
+  Item({required this.id, required this.listId, required this.title});
 }
 
 class Kanban extends StatefulWidget {
@@ -21,7 +21,7 @@ class Kanban extends StatefulWidget {
 }
 
 class _KanbanState extends State<Kanban> {
-  LinkedHashMap<String, List<Item>> board;
+  late LinkedHashMap<String, List<Item>> board;
 
   @override
   void initState() {
@@ -49,25 +49,25 @@ class _KanbanState extends State<Kanban> {
   buildItemDragTarget(listId, targetPosition, double height) {
     return DragTarget<Item>(
       // Will accept others, but not himself
-      onWillAccept: (Item data) {
-        return board[listId].isEmpty ||
-            data.id != board[listId][targetPosition].id;
+      onWillAccept: (Item? data) {
+        return board[listId]!.isEmpty ||
+            data!.id != board[listId]![targetPosition].id;
       },
       // Moves the card into the position
       onAccept: (Item data) {
         setState(() {
-          board[data.listId].remove(data);
+          board[data.listId]!.remove(data);
           data.listId = listId;
-          if (board[listId].length > targetPosition) {
-            board[listId].insert(targetPosition + 1, data);
+          if (board[listId]!.length > targetPosition) {
+            board[listId]!.insert(targetPosition + 1, data);
           } else {
-            board[listId].add(data);
+            board[listId]!.add(data);
           }
         });
       },
       builder:
-          (BuildContext context, List<Item> data, List<dynamic> rejectedData) {
-        if (data.isEmpty) {
+          (BuildContext context, List<Item?>? data, List<dynamic> rejectedData) {
+        if (data!.isEmpty) {
           // The area that accepts the draggable
           return Container(
             height: height,
@@ -79,10 +79,10 @@ class _KanbanState extends State<Kanban> {
               Container(
                 height: height,
               ),
-              ...data.map((Item item) {
+              ...data.map((Item? item) {
                 return Opacity(
                   opacity: 0.5,
-                  child: ItemWidget(item: item),
+                  child: ItemWidget(item: item!),
                 );
               }).toList()
             ],
@@ -120,7 +120,7 @@ class _KanbanState extends State<Kanban> {
         buildItemDragTarget(listId, 0, widget.headerHeight),
         DragTarget<String>(
           // Will accept others, but not himself
-          onWillAccept: (String incomingListId) {
+          onWillAccept: (String? incomingListId) {
             return listId != incomingListId;
           },
           // Moves the card into the position
@@ -131,11 +131,11 @@ class _KanbanState extends State<Kanban> {
                 LinkedHashMap();
                 for (String key in board.keys) {
                   if (key == incomingListId) {
-                    reorderedBoard[listId] = board[listId];
+                    reorderedBoard[listId] = board[listId]!;
                   } else if (key == listId) {
-                    reorderedBoard[incomingListId] = board[incomingListId];
+                    reorderedBoard[incomingListId] = board[incomingListId]!;
                   } else {
-                    reorderedBoard[key] = board[key];
+                    reorderedBoard[key] = board[key]!;
                   }
                 }
                 board = reorderedBoard;
@@ -143,7 +143,7 @@ class _KanbanState extends State<Kanban> {
             );
           },
 
-          builder: (BuildContext context, List<String> data,
+          builder: (BuildContext context, List<String?> data,
               List<dynamic> rejectedData) {
             if (data.isEmpty) {
               // The area that accepts the draggable
@@ -224,7 +224,7 @@ class _KanbanState extends State<Kanban> {
             children: board.keys.map((String key) {
               return Container(
                 width: widget.tileWidth,
-                child: buildKanbanList(key, board[key]),
+                child: buildKanbanList(key, board[key]!),
               );
             }).toList()),
     );
@@ -235,7 +235,7 @@ class _KanbanState extends State<Kanban> {
 class HeaderWidget extends StatelessWidget {
   final String title;
 
-  const HeaderWidget({Key key, this.title}) : super(key: key);
+  const HeaderWidget({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +268,7 @@ class HeaderWidget extends StatelessWidget {
 class ItemWidget extends StatelessWidget {
   final Item item;
 
-  const ItemWidget({Key key, this.item}) : super(key: key);
+  const ItemWidget({Key? key, required this.item}) : super(key: key);
   ListTile makeListTile(Item item) => ListTile(
     contentPadding: EdgeInsets.symmetric(
       horizontal: 20.0,
@@ -307,7 +307,7 @@ class ItemWidget extends StatelessWidget {
 class FloatingWidget extends StatelessWidget {
   final Widget child;
 
-  const FloatingWidget({Key key, this.child}) : super(key: key);
+  const FloatingWidget({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

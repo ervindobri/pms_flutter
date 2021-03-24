@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter_projects/constants/theme_data.dart';
 import 'package:flutter_projects/constants/translations.dart';
 import 'package:flutter_projects/models/consultation.dart';
@@ -11,27 +12,23 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:flutter_web_scrollbar/flutter_web_scrollbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class ConsultationDetails extends StatefulWidget {
   final Consultation consultation;
 
-  ConsultationDetails({this.consultation});
+  ConsultationDetails({required this.consultation});
 
   @override
   _ConsultationDetailsState createState() => _ConsultationDetailsState();
 }
 
 class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerProviderStateMixin{
-  TabController infoTabController;
+  late TabController infoTabController;
+  late TabController exTabController;
+  late ScrollController _controller;
 
-  TabController exTabController;
-
-  ScrollController _controller;
   int _current = 0;
-
   double originalSize = 50;
   double _size = 50;
 
@@ -66,8 +63,8 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
-
     final double headerSize = max(60,_height/30);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Container(
@@ -136,183 +133,173 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
                 ],
               ),
             ),
-            Stack(
-              children: [
-                SingleChildScrollView(
-                  controller: _controller,
-                  child: Container(
-                    width: _width - max(_width/6, 300),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          displayMedicInfo(_height, _width),
-                          displayImages(),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 25.0,horizontal: 5.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: CupertinoColors.white,
-                                borderRadius: ThemeColors.radius25,
-                                boxShadow: ThemeColors.greenShadow,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    menuHeader(Translations.generalInformations),
-                                    Container(
-                                      height: 50,
-                                      width: (infoTabController.length)*120.0,
-                                      child: TabBar(
-                                        controller: infoTabController,
-                                        labelStyle: TextStyle( //up to your taste
-                                            fontWeight: FontWeight.w700
-                                        ),
-                                        indicatorSize: TabBarIndicatorSize.label, //makes it better
-                                        labelColor: ThemeColors.vibrantGreen, //Google's sweet blue
-                                        unselectedLabelColor: ThemeColors.vibrantGreen, //niceish grey
-                                        isScrollable: false, //up to your taste
-                                        indicator: MD2Indicator( //it begins here
-                                            indicatorHeight: 3,
-                                            indicatorColor: ThemeColors.vibrantGreen,
-                                            indicatorSize: MD2IndicatorSize.full //3 different modes tiny-normal-full
-                                        ),
-                                        tabs: <Widget>[
-                                          Container(
-                                            // width: 100,
-                                            child: Tab(
-                                              text: "Consultation",
-                                            ),
+            Scrollbar(
+              isAlwaysShown: true,
+              thickness: 10,
+              hoverThickness: 15,
+              child: SingleChildScrollView(
+                controller: _controller,
+                child: Container(
+                  width: _width - max(_width/6, 300),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        displayMedicInfo(_height, _width),
+                        displayImages(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25.0,horizontal: 5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: CupertinoColors.white,
+                              borderRadius: ThemeColors.radius25,
+                              boxShadow: ThemeColors.greenShadow,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  menuHeader(Translations.generalInformations),
+                                  Container(
+                                    height: 50,
+                                    width: (infoTabController.length)*120.0,
+                                    child: TabBar(
+                                      controller: infoTabController,
+                                      labelStyle: TextStyle( //up to your taste
+                                          fontWeight: FontWeight.w700
+                                      ),
+                                      indicatorSize: TabBarIndicatorSize.label, //makes it better
+                                      labelColor: ThemeColors.vibrantGreen, //Google's sweet blue
+                                      unselectedLabelColor: ThemeColors.vibrantGreen, //niceish grey
+                                      isScrollable: false, //up to your taste
+                                      indicator: BubbleTabIndicator(
+                                        indicatorHeight: 25.0,
+                                        indicatorColor: Colors.greenAccent.withOpacity(.2),
+                                        tabBarIndicatorSize: TabBarIndicatorSize.label,
+                                        // Other flags
+                                        // insets: EdgeInsets.all(1),
+                                        // padding: EdgeInsets.all(10)
+                                      ),
+                                      tabs: <Widget>[
+                                        Container(
+                                          // width: 100,
+                                          child: Tab(
+                                            text: "Consultation",
                                           ),
-                                          Container(
-                                            // width: 60,
-                                            child: Tab(
-                                              text: "Patient",
-                                            ),
+                                        ),
+                                        Container(
+                                          // width: 60,
+                                          child: Tab(
+                                            text: "Patient",
                                           ),
-                                        ],
+                                        ),
+                                      ],
 
-                                      ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: _width,
-                                        height: max(250, _height/4),
-                                        child: TabBarView(
-                                          controller: infoTabController,
-                                          children: [
-                                            ConsultationInfo(consultation: widget.consultation),
-                                            PersonalInfo(patient: widget.consultation.patient),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: CupertinoColors.white,
-                                borderRadius: ThemeColors.radius25,
-                                boxShadow: ThemeColors.greenShadow,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    menuHeader(Translations.examinations),
-                                    Container(
-                                      height: 50,
-                                      width: (exTabController.length)*120.0,
-                                      child: TabBar(
-                                        controller: exTabController,
-                                        labelStyle: TextStyle( //up to your taste
-                                            fontWeight: FontWeight.w700
-                                        ),
-                                        indicatorSize: TabBarIndicatorSize.label, //makes it better
-                                        labelColor: ThemeColors.vibrantGreen, //Google's sweet blue
-                                        unselectedLabelColor: ThemeColors.vibrantGreen, //niceish grey
-                                        isScrollable: false, //up to your taste
-                                        indicator: MD2Indicator( //it begins here
-                                            indicatorHeight: 3,
-                                            indicatorColor: ThemeColors.vibrantGreen,
-                                            indicatorSize: MD2IndicatorSize.full //3 different modes tiny-normal-full
-                                        ),
-                                        tabs: <Widget>[
-                                          Container(
-                                            // width: 100,
-                                            child: Tab(
-                                              text: "Clinical",
-                                            ),
-                                          ),
-                                          Container(
-                                            // width: 60,
-                                            child: Tab(
-                                              text: "Paraclinical",
-                                            ),
-                                          ),
-                                          Container(
-                                            // width: 60,
-                                            child: Tab(
-                                              text: "Local",
-                                            ),
-                                          ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: _width,
+                                      height: max(250, _height/4),
+                                      child: TabBarView(
+                                        controller: infoTabController,
+                                        children: [
+                                          ConsultationInfo(consultation: widget.consultation),
+                                          PersonalInfo(patient: widget.consultation.patient),
                                         ],
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: _width,
-                                        height: 300,
-                                        child: TabBarView(
-                                          controller: exTabController,
-                                          children: [
-                                            ConsultationInfo(consultation: widget.consultation),
-                                            ConsultationInfo(consultation: widget.consultation),
-                                            ConsultationInfo(consultation: widget.consultation),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: CupertinoColors.white,
+                              borderRadius: ThemeColors.radius25,
+                              boxShadow: ThemeColors.greenShadow,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  menuHeader(Translations.examinations),
+                                  Container(
+                                    height: 50,
+                                    width: (exTabController.length)*120.0,
+                                    child: TabBar(
+                                      controller: exTabController,
+                                      labelStyle: TextStyle( //up to your taste
+                                          fontWeight: FontWeight.w700
+                                      ),
+                                      indicatorSize: TabBarIndicatorSize.label, //makes it better
+                                      labelColor: ThemeColors.vibrantGreen, //Google's sweet blue
+                                      unselectedLabelColor: ThemeColors.vibrantGreen, //niceish grey
+                                      isScrollable: false, //up to your taste
+                                      indicator: BubbleTabIndicator(
+                                        indicatorHeight: 25.0,
+                                        indicatorColor: ThemeColors.vibrantGreen.withOpacity(.2),
+                                        tabBarIndicatorSize: TabBarIndicatorSize.label,
+                                        // Other flags
+                                        // indicatorRadius: 1,
+                                        // insets: EdgeInsets.all(1),
+                                        // padding: EdgeInsets.all(10)
+                                      ),
+                                      tabs: <Widget>[
+                                        Container(
+                                          // width: 100,
+                                          child: Tab(
+                                            text: "Clinical",
+                                          ),
+                                        ),
+                                        Container(
+                                          // width: 60,
+                                          child: Tab(
+                                            text: "Paraclinical",
+                                          ),
+                                        ),
+                                        Container(
+                                          // width: 60,
+                                          child: Tab(
+                                            text: "Local",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: _width,
+                                      height: 300,
+                                      child: TabBarView(
+                                        controller: exTabController,
+                                        children: [
+                                          ConsultationInfo(consultation: widget.consultation),
+                                          ConsultationInfo(consultation: widget.consultation),
+                                          ConsultationInfo(consultation: widget.consultation),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    width: 50,
-                    // color: ThemeColors.vibrantGreen,
-                    child: FlutterWebScroller(
-                      //Pass a reference to the ScrollCallBack function into the scrollbar
-                      scrollCallBack,
-                      //Add optional values
-                      scrollBarBackgroundColor: ThemeColors.vibrantGreen,
-                      scrollBarWidth: 20.0,
-                      dragHandleColor: Colors.red,
-                      dragHandleBorderRadius: 25.0,
-                      dragHandleHeight: 300.0,
-                      dragHandleWidth: 25.0,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             )
           ],
         ),
@@ -460,9 +447,9 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
                                   ),
                                 ),
                                 infoRow("Address", patient.address + "," + patient.country  +"," + patient.city),
-                                infoRow("Mobile phone",patient.phone),
-                                infoRow("Fax",patient.fax),
-                                infoRow("Email address",patient.email)
+                                infoRow("Mobile phone",patient.phone!),
+                                infoRow("Fax",patient.fax!),
+                                infoRow("Email address",patient.email!)
                               ],
                             ),
                           ),
@@ -728,7 +715,6 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
               ),
             ),
             Scrollbar(
-              radius: Radius.circular(25.0),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
@@ -829,7 +815,7 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
                       height: 300,
                       width: 1000,
                       child: CarouselSlider.builder(
-                        itemBuilder: (BuildContext context, int index) {
+                        itemBuilder: (BuildContext context, int index, int stuff) {
                           return Container(
                             // width: 500,
                             height: 300,
@@ -850,7 +836,7 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
                                       decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: NetworkImage(
-                                              widget.consultation.images[index].url,
+                                              widget.consultation.images![index].url,
                                           ),
                                         fit: BoxFit.contain
                                       ),
@@ -871,12 +857,12 @@ class _ConsultationDetailsState extends State<ConsultationDetails>  with TickerP
                                 _current = index;
                               });
                             }
-                        ), itemCount: widget.consultation.images.length,
+                        ), itemCount: widget.consultation.images!.length,
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(widget.consultation.images.length, (index){
+                      children: List.generate(widget.consultation.images!.length, (index){
                         return Container(
                           width: 8.0,
                           height: 8.0,

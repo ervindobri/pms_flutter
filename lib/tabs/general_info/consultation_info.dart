@@ -8,7 +8,7 @@ class ConsultationInfo extends StatelessWidget {
   final Consultation consultation;
 
 
-  const ConsultationInfo({Key key, this.consultation}) : super(key: key);
+  const ConsultationInfo({Key? key, required this.consultation}) : super(key: key);
   @override
   Widget build(BuildContext context) {
 

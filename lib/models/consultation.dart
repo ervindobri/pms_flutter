@@ -13,7 +13,7 @@ class Consultation{
     String duration;
 
     //images
-    List<DermaImage> images;
+    List<DermaImage>? images;
     //anamneza - kortortenet
     String hospitalizationType;
     List<String> hospitalizationReasons;
